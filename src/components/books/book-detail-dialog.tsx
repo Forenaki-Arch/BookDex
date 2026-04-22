@@ -15,7 +15,7 @@ import { RatingStars } from "@/components/books/rating-stars";
 import { useBooksStore } from "@/store/books-store";
 import type { Book, BookStatus } from "@/lib/types";
 import { STATUS_LABELS } from "@/lib/types";
-import { formatPrice, truncate } from "@/lib/utils";
+import { formatPrice, safeImageUrl, truncate } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface Props {
@@ -55,11 +55,11 @@ export function BookDetailDialog({ book, open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg p-0 overflow-hidden max-h-[90vh] flex flex-col">
         <div className="relative flex-shrink-0">
-          {/* Sfondo sfocato con cover */}
-          {book.thumbnail && (
+          {/* Sfondo sfocato con cover — URL validato per prevenire CSS injection */}
+          {safeImageUrl(book.thumbnail) && (
             <div
               className="absolute inset-0 bg-cover bg-center opacity-40 blur-2xl scale-125"
-              style={{ backgroundImage: `url(${book.thumbnail})` }}
+              style={{ backgroundImage: `url("${safeImageUrl(book.thumbnail)}")` }}
               aria-hidden
             />
           )}

@@ -5,6 +5,25 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il p
 
 ---
 
+## [1.0.1] — 2026-04-23
+
+### Fix — Build & deploy
+- **Rimosso `next-pwa@5.6.0`**: il pacchetto non è più manutenuto ed è incompatibile con Next.js 14 App Router + `app/manifest.ts` (entrambi tentavano di generare un manifest causando build break su Vercel). L'app resta installabile grazie a `app/manifest.ts`; il supporto offline con service worker tornerà in 1.1 con un'alternativa moderna.
+- **Upgrade `next-themes`** da `^0.3.0` a `^0.4.3`: `ThemeProviderProps` non era esportato in modo stabile dalla 0.3, causando errori TypeScript durante il build su Vercel. Ora i prop sono derivati direttamente dal componente con `React.ComponentProps<typeof NextThemesProvider>`.
+- **Sonner**: aggiunto `import * as React from "react"` mancante in `components/ui/sonner.tsx` (usava `React.ComponentProps` senza importare il namespace).
+- **Layouts**: sostituito `React.ReactNode` con `import type { ReactNode } from "react"` in `app/layout.tsx` e `(app)/layout.tsx` per evitare dipendenza dal namespace globale.
+- Aggiunto `.nvmrc` (Node 20) per coerenza con Vercel.
+
+### Aggiunto — Sicurezza
+- **CSS injection defense**: nuova utility `safeImageUrl(url)` in `lib/utils.ts` che valida protocollo e caratteri pericolosi prima di iniettare URL in `background-image: url(...)`. Applicata nel `BookDetailDialog`.
+- **Security headers** via `next.config.mjs` `headers()`:
+  - `X-Content-Type-Options: nosniff`
+  - `X-Frame-Options: DENY`
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+  - `Permissions-Policy: camera=(self), microphone=(), geolocation=()`
+
+---
+
 ## [1.0.0] — 2026-04-22
 
 Prima release pubblica di **BookDex**. Un tracker di libri completo, installabile, offline-first.

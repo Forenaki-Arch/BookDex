@@ -28,3 +28,18 @@ export function truncate(text: string, max: number) {
 export function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, "");
 }
+
+// Valida un URL http/https prima di iniettarlo in CSS (previene CSS injection)
+// Ritorna undefined se l'URL non è http(s) o se il parsing fallisce.
+export function safeImageUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return undefined;
+    // Rimuoviamo caratteri che potrebbero chiudere la funzione url() in CSS
+    if (/["'()\\]/.test(url)) return undefined;
+    return url;
+  } catch {
+    return undefined;
+  }
+}

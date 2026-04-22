@@ -1,8 +1,9 @@
+import type { ReactNode } from "react";
 import { Sidebar } from "@/components/navigation/sidebar";
 import { BottomNav } from "@/components/navigation/bottom-nav";
 
 // Layout adattivo dell'applicazione: Sidebar su desktop (md+), Bottom nav su mobile
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
