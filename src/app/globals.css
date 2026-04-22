@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Tema Chiaro (default) */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 4%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+    --radius: 0.75rem;
+  }
+
+  /* Tema Scuro */
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 210 40% 98%;
+    --card: 224 71% 6%;
+    --card-foreground: 210 40% 98%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 224 76% 48%;
+  }
+
+  /* Tema Paper / Sepia (personalizzato) */
+  .sepia {
+    --background: 39 45% 93%;
+    --foreground: 30 25% 18%;
+    --card: 39 40% 96%;
+    --card-foreground: 30 25% 18%;
+    --popover: 39 40% 96%;
+    --popover-foreground: 30 25% 18%;
+    --primary: 25 60% 40%;
+    --primary-foreground: 39 45% 96%;
+    --secondary: 35 30% 85%;
+    --secondary-foreground: 30 25% 18%;
+    --muted: 35 30% 88%;
+    --muted-foreground: 30 15% 38%;
+    --accent: 35 35% 80%;
+    --accent-foreground: 30 25% 18%;
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 39 45% 96%;
+    --border: 35 25% 78%;
+    --input: 35 25% 78%;
+    --ring: 25 60% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    overscroll-behavior-y: none;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Safe area per notch iOS / navigation bars Android */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Scrollbar sottile in stile moderno */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  /* Sfondo animato per hero landing */
+  .animated-gradient {
+    background: linear-gradient(
+      -45deg,
+      hsl(var(--primary) / 0.15),
+      hsl(var(--accent) / 0.2),
+      hsl(var(--primary) / 0.1),
+      hsl(var(--accent) / 0.15)
+    );
+    background-size: 400% 400%;
+    animation: gradient-shift 12s ease infinite;
+  }
+  /* Glow al hover */
+  .glow-on-hover {
+    position: relative;
+    overflow: hidden;
+  }
+  .glow-on-hover::before {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.4), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .glow-on-hover:hover::before {
+    opacity: 1;
+  }
+}
