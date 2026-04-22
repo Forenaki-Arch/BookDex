@@ -10,6 +10,9 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
