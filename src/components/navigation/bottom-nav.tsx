@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Settings } from "lucide-react";
+import { BarChart3, Home, Search, Settings } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const items = [
   { href: "/app", label: "Libreria", icon: Home },
   { href: "/app/search", label: "Scopri", icon: Search },
+  { href: "/app/stats", label: "Stats", icon: BarChart3 },
   { href: "/app/settings", label: "Profilo", icon: Settings },
 ];
 

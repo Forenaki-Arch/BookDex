@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookMarked, Home, Search, Settings, Sparkles } from "lucide-react";
+import { BarChart3, BookMarked, Folder, Home, Search, Settings, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -9,6 +9,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 const items = [
   { href: "/app", label: "La mia Libreria", icon: Home },
   { href: "/app/search", label: "Scopri & Scansiona", icon: Search },
+  { href: "/app/collections", label: "Collezioni", icon: Folder },
+  { href: "/app/stats", label: "Statistiche", icon: BarChart3 },
   { href: "/app/settings", label: "Impostazioni", icon: Settings },
 ];
 

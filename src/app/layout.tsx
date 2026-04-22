@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Inter, Lora } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { AutoThemeMount } from "@/components/auto-theme-mount";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="it" suppressHydrationWarning>
       <body className={`${inter.variable} ${lora.variable} font-sans`}>
         <ThemeProvider>
+          <AutoThemeMount />
           {children}
           <Toaster position="top-center" richColors />
         </ThemeProvider>

@@ -2,7 +2,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, Bookmark, CheckCheck, Library, Plus, Sparkles } from "lucide-react";
+import { BookOpen, Bookmark, CheckCheck, Folder, Library, Plus, Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { BookListItem } from "@/components/books/book-list-item";
@@ -67,11 +67,18 @@ export default function DashboardPage() {
               : `${stats.total} ${stats.total === 1 ? "libro" : "libri"} in collezione`}
           </p>
         </div>
-        <Button asChild size="sm" className="shadow-md">
-          <Link href="/app/search">
-            <Plus className="w-4 h-4 mr-1" /> Aggiungi
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button asChild size="sm" variant="outline">
+            <Link href="/app/collections">
+              <Folder className="w-4 h-4 mr-1" /> Collezioni
+            </Link>
+          </Button>
+          <Button asChild size="sm" className="shadow-md">
+            <Link href="/app/search">
+              <Plus className="w-4 h-4 mr-1" /> Aggiungi
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Mini statistiche */}

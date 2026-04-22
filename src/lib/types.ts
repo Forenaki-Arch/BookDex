@@ -22,7 +22,10 @@ export interface SavedBook extends Book {
   status: BookStatus;
   rating?: number;                          // 1-5, valido solo per "read"
   progress?: number;                        // 0-100 per "reading"
-  notes?: string;
+  notes?: string;                           // note libere dell'utente
+  tags?: string[];                          // collezioni personalizzate (es. "fantasy", "regalo")
+  startedAt?: number;                       // timestamp inizio lettura
+  finishedAt?: number;                      // timestamp completamento
   addedAt: number;                          // timestamp
   updatedAt: number;
 }

@@ -1,8 +1,8 @@
 "use client";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { BookOpen, Bookmark, CheckCheck, Trash2 } from "lucide-react";
+import { BookOpen, Bookmark, CheckCheck, Hash, NotebookPen, Plus, Trash2, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { RatingStars } from "@/components/books/rating-stars";
 import { useBooksStore } from "@/store/books-store";
 import type { Book, BookStatus } from "@/lib/types";
@@ -24,12 +26,22 @@ interface Props {
   onOpenChange: (v: boolean) => void;
 }
 
-// Dialog di dettaglio libro con azioni di aggiunta/rimozione/voto
+// Dialog di dettaglio libro con azioni, note personali e collezioni (tag)
 export function BookDetailDialog({ book, open, onOpenChange }: Props) {
   const addBook = useBooksStore((s) => s.addBook);
   const removeBook = useBooksStore((s) => s.removeBook);
   const rateBook = useBooksStore((s) => s.rateBook);
+  const setNotes = useBooksStore((s) => s.setNotes);
+  const setTags = useBooksStore((s) => s.setTags);
   const saved = useBooksStore((s) => (book ? s.books[book.id] : undefined));
+
+  const [notesDraft, setNotesDraft] = useState("");
+  const [tagInput, setTagInput] = useState("");
+
+  // Sincronizza la bozza note con il libro selezionato
+  useEffect(() => {
+    setNotesDraft(saved?.notes ?? "");
+  }, [saved?.id, saved?.notes]);
 
   const shortDescription = useMemo(
     () => (book?.description ? truncate(book.description, 600) : ""),
@@ -49,6 +61,33 @@ export function BookDetailDialog({ book, open, onOpenChange }: Props) {
     removeBook(book.id);
     toast.info("Libro rimosso dalle tue liste");
     onOpenChange(false);
+  };
+
+  const handleSaveNotes = () => {
+    if (!saved) return;
+    setNotes(book.id, notesDraft);
+    toast.success("Note salvate");
+  };
+
+  const handleAddTag = () => {
+    if (!saved) return;
+    const t = tagInput.trim().toLowerCase();
+    if (!t) return;
+    const existing = saved.tags ?? [];
+    if (existing.includes(t)) {
+      setTagInput("");
+      return;
+    }
+    setTags(book.id, [...existing, t]);
+    setTagInput("");
+  };
+
+  const handleRemoveTag = (t: string) => {
+    if (!saved) return;
+    setTags(
+      book.id,
+      (saved.tags ?? []).filter((x) => x !== t)
+    );
   };
 
   return (
@@ -121,7 +160,7 @@ export function BookDetailDialog({ book, open, onOpenChange }: Props) {
           </div>
         </div>
 
-        <div className="px-6 pb-4 overflow-y-auto flex-1">
+        <div className="px-6 pb-4 overflow-y-auto flex-1 space-y-4">
           {shortDescription ? (
             <p className="text-sm text-muted-foreground leading-relaxed font-serif">
               {shortDescription}
@@ -130,7 +169,7 @@ export function BookDetailDialog({ book, open, onOpenChange }: Props) {
             <p className="text-sm text-muted-foreground italic">Nessuna descrizione disponibile.</p>
           )}
           {book.categories && book.categories.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1">
               {book.categories.map((c) => (
                 <Badge key={c} variant="outline" className="text-[10px]">
                   {c}
@@ -138,9 +177,73 @@ export function BookDetailDialog({ book, open, onOpenChange }: Props) {
               ))}
             </div>
           )}
+
+          {/* Collezioni e note sono disponibili solo per libri già in libreria */}
+          {saved && (
+            <>
+              <div className="pt-2 border-t border-border/60 space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <Hash className="w-3.5 h-3.5" /> Collezioni
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(saved.tags ?? []).map((t) => (
+                    <Badge key={t} variant="secondary" className="gap-1 pr-1">
+                      #{t}
+                      <button
+                        onClick={() => handleRemoveTag(t)}
+                        className="ml-0.5 rounded hover:bg-background/60 p-0.5"
+                        aria-label={`Rimuovi ${t}`}
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Nuova collezione..."
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddTag();
+                      }
+                    }}
+                    className="h-8 text-xs"
+                  />
+                  <Button size="sm" variant="outline" onClick={handleAddTag} className="h-8">
+                    <Plus className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-border/60 space-y-2">
+                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <NotebookPen className="w-3.5 h-3.5" /> Note personali
+                </div>
+                <Textarea
+                  value={notesDraft}
+                  onChange={(e) => setNotesDraft(e.target.value)}
+                  placeholder="Appunta qui le tue impressioni, citazioni preferite..."
+                  className="min-h-[80px] text-sm"
+                />
+                <div className="flex justify-end">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleSaveNotes}
+                    disabled={notesDraft === (saved.notes ?? "")}
+                    className="h-8 text-xs"
+                  >
+                    Salva note
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
-        {/* Azioni rapide: aggiungi alle tre liste */}
         <div className="p-4 border-t border-border bg-background/95 backdrop-blur-sm grid grid-cols-3 gap-2 flex-shrink-0">
           <Button
             variant={saved?.status === "to-read" ? "default" : "outline"}
