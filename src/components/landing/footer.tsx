@@ -8,7 +8,7 @@ export function Footer() {
         <div className="flex items-center gap-2">
           <BookMarked className="w-4 h-4 text-primary" />
           <span className="font-semibold">BookDex</span>
-          <span className="text-muted-foreground">v1.0</span>
+          <span className="text-muted-foreground">v1.1</span>
         </div>
 
         <div className="flex items-center gap-6 text-muted-foreground">
@@ -26,8 +26,11 @@ export function Footer() {
         </div>
 
         <p className="text-xs text-muted-foreground flex items-center gap-1">
-          Made with <Heart className="w-3 h-3 text-red-500 fill-current" /> per i lettori
+          Made with <Heart className="w-3 h-3 text-red-500 fill-current" /> for readers
         </p>
+      </div>
+      <div className="border-t border-border/40 py-4 text-center text-xs text-muted-foreground">
+        Developed by Forenaki
       </div>
     </footer>
   );

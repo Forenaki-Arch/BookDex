@@ -31,8 +31,9 @@ import {
   type AutoThemeConfig,
 } from "@/hooks/use-auto-theme";
 import { toast } from "sonner";
+import Link from "next/link";
+import { BookMarked } from "lucide-react";
 
-// Pagina impostazioni: tema, auto-dark, import/export, info
 export default function SettingsPage() {
   const books = useBooksStore((s) => s.books);
   const importBooks = useBooksStore((s) => s.importBooks);
@@ -48,11 +49,9 @@ export default function SettingsPage() {
     const next = { ...schedule, ...patch };
     setSchedule(next);
     saveSchedule(next);
-    // Notifica l'AutoThemeMount di ricaricare
     window.dispatchEvent(new Event("bookdex-auto-theme"));
   };
 
-  // Esporta la libreria in JSON
   const handleExport = () => {
     try {
       const data = JSON.stringify({ version: 2, exportedAt: Date.now(), books }, null, 2);
@@ -63,13 +62,12 @@ export default function SettingsPage() {
       a.download = `bookdex-backup-${new Date().toISOString().split("T")[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      toast.success("Backup scaricato!");
+      toast.success("Backup downloaded!");
     } catch {
-      toast.error("Errore durante l'export");
+      toast.error("Export error");
     }
   };
 
-  // Import CSV Goodreads o JSON di backup
   const handleImportFile = async (file: File) => {
     try {
       const text = await file.text();
@@ -81,17 +79,17 @@ export default function SettingsPage() {
         items = parseGoodreadsCsv(text);
       }
       if (items.length === 0) {
-        toast.error("Nessun libro trovato nel file");
+        toast.error("No books found in the file");
         return;
       }
       const { added, skipped } = importBooks(items);
-      toast.success(`Importati ${added} libri`, {
-        description: skipped > 0 ? `${skipped} già presenti, saltati.` : undefined,
+      toast.success(`Imported ${added} books`, {
+        description: skipped > 0 ? `${skipped} already present, skipped.` : undefined,
       });
     } catch (err) {
       console.error(err);
-      toast.error("File non valido", {
-        description: "Assicurati che sia un CSV Goodreads o un backup BookDex.",
+      toast.error("Invalid file", {
+        description: "Make sure it is a Goodreads CSV or a BookDex backup.",
       });
     }
   };
@@ -99,27 +97,27 @@ export default function SettingsPage() {
   const handleClear = () => {
     if (
       !confirm(
-        "Sei sicuro di voler cancellare tutta la tua libreria? Questa azione è irreversibile."
+        "Are you sure you want to delete your entire library? This action is irreversible."
       )
     )
       return;
     useBooksStore.setState({ books: {} });
-    toast.success("Libreria svuotata");
+    toast.success("Library cleared");
   };
 
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Impostazioni</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Personalizza BookDex e gestisci la tua collezione.
+          Customize BookDex and manage your collection.
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Aspetto</CardTitle>
-          <CardDescription>Scegli il tema che preferisci.</CardDescription>
+          <CardTitle>Appearance</CardTitle>
+          <CardDescription>Choose your preferred theme.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <ThemeToggle />
@@ -129,22 +127,22 @@ export default function SettingsPage() {
               <div>
                 <div className="flex items-center gap-2 text-sm font-medium">
                   <Clock className="w-4 h-4" />
-                  Tema automatico per ora
+                  Auto theme by time
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Passa automaticamente tra chiaro e scuro in base all&apos;ora del giorno.
+                  Automatically switch between light and dark based on the time of day.
                 </p>
               </div>
               <Switch
                 checked={schedule.enabled}
                 onCheckedChange={(v) => updateSchedule({ enabled: v })}
-                aria-label="Abilita tema automatico"
+                aria-label="Enable auto theme"
               />
             </div>
             {schedule.enabled && (
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <label className="space-y-1">
-                  <span className="text-xs text-muted-foreground">Scuro dalle</span>
+                  <span className="text-xs text-muted-foreground">Dark from</span>
                   <Input
                     type="number"
                     min={0}
@@ -157,7 +155,7 @@ export default function SettingsPage() {
                   />
                 </label>
                 <label className="space-y-1">
-                  <span className="text-xs text-muted-foreground">Alle (non incluso)</span>
+                  <span className="text-xs text-muted-foreground">Until (excluded)</span>
                   <Input
                     type="number"
                     min={0}
@@ -177,15 +175,15 @@ export default function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Gestione dati</CardTitle>
+          <CardTitle>Data management</CardTitle>
           <CardDescription>
-            I tuoi libri sono salvati localmente sul dispositivo ({total}{" "}
-            {total === 1 ? "elemento" : "elementi"}).
+            Your books are saved locally on this device ({total}{" "}
+            {total === 1 ? "item" : "items"}).
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           <Button variant="outline" onClick={handleExport} className="w-full justify-start">
-            <Download className="w-4 h-4 mr-2" /> Esporta backup JSON
+            <Download className="w-4 h-4 mr-2" /> Export JSON backup
           </Button>
 
           <input
@@ -204,11 +202,11 @@ export default function SettingsPage() {
             onClick={() => fileRef.current?.click()}
             className="w-full justify-start"
           >
-            <Upload className="w-4 h-4 mr-2" /> Importa da Goodreads CSV / backup JSON
+            <Upload className="w-4 h-4 mr-2" /> Import from Goodreads CSV / JSON backup
           </Button>
           <p className="text-[11px] text-muted-foreground px-1 pt-1">
-            Esporta da Goodreads → <em>My Books</em> → <em>Import / Export</em> e carica il
-            file <code>.csv</code>. I libri già presenti non vengono sovrascritti.
+            Export from Goodreads → <em>My Books</em> → <em>Import / Export</em> and upload the{" "}
+            <code>.csv</code> file. Books already in your library will not be overwritten.
           </p>
 
           <Button
@@ -216,7 +214,7 @@ export default function SettingsPage() {
             onClick={handleClear}
             className="w-full justify-start text-destructive hover:text-destructive"
           >
-            <Trash2 className="w-4 h-4 mr-2" /> Cancella libreria
+            <Trash2 className="w-4 h-4 mr-2" /> Clear library
           </Button>
         </CardContent>
       </Card>
@@ -224,25 +222,30 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Info className="w-5 h-5" /> Informazioni
+            <Info className="w-5 h-5" /> About
           </CardTitle>
           <CardDescription>BookDex v1.1</CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-3">
           <p>
-            BookDex è una PWA mobile-first per tracciare i tuoi libri. Usa Google Books come sorgente
-            dati e salva tutto localmente sul tuo dispositivo — nessun account, nessun server.
+            BookDex is a mobile-first PWA for tracking your books. It uses Google Books as a data
+            source and saves everything locally on your device — no account, no server.
           </p>
           <div className="flex items-center gap-2 pt-2 text-xs">
             <Heart className="w-3.5 h-3.5 text-red-500 fill-current" />
             Made with love — <Github className="w-3.5 h-3.5" /> Open source
           </div>
+          <Button asChild variant="outline" size="sm" className="mt-2">
+            <Link href="/about">
+              <BookMarked className="w-4 h-4 mr-2" /> About BookDex
+            </Link>
+          </Button>
         </CardContent>
       </Card>
 
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <FileUp className="w-3.5 h-3.5" />
-        Tutti i dati non lasciano mai il tuo browser.
+        All your data never leaves your browser.
       </div>
     </div>
   );

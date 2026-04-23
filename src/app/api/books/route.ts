@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
-// Proxy server-side per Google Books: evita problemi CORS, aggiunge cache edge
-const GOOGLE_BOOKS = "https://www.googleapis.com/books/v1/volumes";
+const OPEN_LIBRARY = "https://openlibrary.org/search.json";
 
 export const runtime = "edge";
 
@@ -11,18 +10,21 @@ export async function GET(request: Request) {
   const isbn = searchParams.get("isbn");
 
   if (!q && !isbn) {
-    return NextResponse.json({ error: "Parametro q o isbn richiesto" }, { status: 400 });
+    return NextResponse.json({ error: "Missing q or isbn parameter" }, { status: 400 });
   }
 
-  const query = isbn ? `isbn:${isbn}` : q!;
-  const url = `${GOOGLE_BOOKS}?q=${encodeURIComponent(query)}&maxResults=20&printType=books`;
+  const query = isbn
+    ? `isbn=${encodeURIComponent(isbn)}`
+    : `q=${encodeURIComponent(q!)}`;
+
+  const fields = "key,title,author_name,isbn,cover_i,first_publish_year,number_of_pages_median,publisher,subject,language";
+  const url = `${OPEN_LIBRARY}?${query}&limit=20&fields=${fields}`;
 
   try {
     const res = await fetch(url, {
-      // Cache edge di Vercel: 1h per ricerche ripetute
-      next: { revalidate: 3600 },
+      headers: { "User-Agent": "BookDex/1.1 (https://github.com/Forenaki-Arch/BookDex)" },
     });
-    if (!res.ok) throw new Error(`Google Books ha risposto ${res.status}`);
+    if (!res.ok) throw new Error(`Open Library responded ${res.status}`);
     const data = await res.json();
     return NextResponse.json(data, {
       headers: {
@@ -30,7 +32,7 @@ export async function GET(request: Request) {
       },
     });
   } catch (err) {
-    console.error("Errore API books:", err);
-    return NextResponse.json({ error: "Errore servizio libri" }, { status: 502 });
+    console.error("Books API error:", err);
+    return NextResponse.json({ error: "Book service error" }, { status: 502 });
   }
 }

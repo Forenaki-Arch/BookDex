@@ -10,7 +10,6 @@ interface Props {
   readOnly?: boolean;
 }
 
-// Rating a stelle (0-5) con hover preview
 export function RatingStars({ value, onChange, size = "md", readOnly = false }: Props) {
   const [hover, setHover] = useState(0);
   const sizes = { sm: "w-3.5 h-3.5", md: "w-5 h-5", lg: "w-6 h-6" };
@@ -21,7 +20,7 @@ export function RatingStars({ value, onChange, size = "md", readOnly = false }: 
       className="inline-flex items-center gap-0.5"
       onMouseLeave={() => setHover(0)}
       role="radiogroup"
-      aria-label="Valutazione"
+      aria-label="Rating"
     >
       {[1, 2, 3, 4, 5].map((n) => (
         <button
@@ -35,7 +34,7 @@ export function RatingStars({ value, onChange, size = "md", readOnly = false }: 
             !readOnly && "hover:scale-125 cursor-pointer",
             readOnly && "cursor-default"
           )}
-          aria-label={`${n} stelle`}
+          aria-label={`${n} star${n !== 1 ? "s" : ""}`}
         >
           <Star
             className={cn(

@@ -12,83 +12,63 @@ interface BarcodeScannerProps {
   onClose?: () => void;
 }
 
-// Scanner ISBN tramite fotocamera: usa @zxing/library e richiede HTTPS
 export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const readerRef = useRef<BrowserMultiFormatReader | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
 
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  // Pulizia risorse: fondamentale per non tenere la camera accesa
   const cleanup = useCallback(() => {
     readerRef.current?.reset();
-    streamRef.current?.getTracks().forEach((t) => t.stop());
-    streamRef.current = null;
     readerRef.current = null;
     setIsScanning(false);
   }, []);
 
-  // Avvia la camera e la scansione continua
   const startScanning = useCallback(async () => {
     setError(null);
     setSuccess(false);
+    if (!videoRef.current) return;
 
     try {
-      // Preferiamo la fotocamera posteriore su mobile
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" } },
-        audio: false,
-      });
-
-      streamRef.current = stream;
-
-      if (!videoRef.current) return;
-      videoRef.current.srcObject = stream;
-      await videoRef.current.play();
-
-      // Inizializza zxing e decodifica in continuo
       const reader = new BrowserMultiFormatReader();
       readerRef.current = reader;
       setIsScanning(true);
 
-      reader.decodeFromVideoElementContinuously(videoRef.current, (result, err) => {
+      // null → prefer back (environment) camera; the library handles getUserMedia
+      await reader.decodeFromVideoDevice(null, videoRef.current, (result, err) => {
         if (result) {
           const code = result.getText();
           const clean = code.replace(/[-\s]/g, "");
-          // Validazione ISBN: 10 o 13 cifre (eventualmente EAN-13 iniziante 978/979)
-          if (/^(97(8|9))?\d{9}(\d|X)$/i.test(clean)) {
+          if (/^(97[89])?\d{9}[\dX]$/i.test(clean)) {
             setSuccess(true);
             cleanup();
-            // Piccolo delay per mostrare l'animazione di successo
             setTimeout(() => onScan(clean), 600);
           }
         }
-        // NotFoundException è normale: significa "nessun codice visibile"
         if (err && !(err instanceof NotFoundException)) {
-          console.error("Errore decodifica:", err);
+          console.error("Decode error:", err);
         }
       });
     } catch (err: unknown) {
+      setIsScanning(false);
       const e = err as DOMException;
-      let message = "Impossibile accedere alla fotocamera.";
+      let message = "Unable to access the camera.";
       if (e.name === "NotAllowedError") {
-        message = "Permesso fotocamera negato. Abilitalo dalle impostazioni del browser.";
+        message = "Camera permission denied. Enable it in your browser settings.";
       } else if (e.name === "NotFoundError") {
-        message = "Nessuna fotocamera trovata su questo dispositivo.";
+        message = "No camera found on this device.";
       } else if (e.name === "NotReadableError") {
-        message = "La fotocamera è già in uso da un'altra applicazione.";
+        message = "The camera is already in use by another application.";
       } else if (e.name === "SecurityError") {
-        message = "Accesso alla fotocamera bloccato. Richiede HTTPS.";
+        message = "Camera access blocked. HTTPS is required.";
       }
       setError(message);
-      toast.error("Errore Scanner", { description: message });
+      toast.error("Scanner error", { description: message });
     }
   }, [cleanup, onScan]);
 
-  // Start all'apertura del componente, cleanup all'unmount
   useEffect(() => {
     startScanning();
     return cleanup;
@@ -108,7 +88,6 @@ export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
       {isScanning && !success && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative w-4/5 max-w-sm aspect-[3/2] rounded-xl">
-            {/* Angoli decorativi animati */}
             {[
               "top-0 left-0 border-l-4 border-t-4 rounded-tl-xl",
               "top-0 right-0 border-r-4 border-t-4 rounded-tr-xl",
@@ -123,7 +102,6 @@ export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
                 className={`absolute w-10 h-10 border-primary ${cls}`}
               />
             ))}
-            {/* Linea di scansione */}
             <motion.div
               className="absolute inset-x-0 h-0.5 bg-primary shadow-[0_0_16px_hsl(var(--primary))]"
               initial={{ top: "10%" }}
@@ -159,14 +137,14 @@ export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
           <CameraOff className="w-12 h-12 text-destructive" />
           <p className="text-sm max-w-xs">{error}</p>
           <Button variant="secondary" onClick={startScanning}>
-            <Camera className="w-4 h-4 mr-2" /> Riprova
+            <Camera className="w-4 h-4 mr-2" /> Retry
           </Button>
         </div>
       )}
 
       <div className="absolute top-0 inset-x-0 safe-top p-4 flex justify-between items-start z-10">
         <div className="bg-black/60 backdrop-blur-md text-white text-xs px-3 py-2 rounded-full">
-          Inquadra il codice a barre ISBN
+          Point at the ISBN barcode
         </div>
         {onClose && (
           <Button

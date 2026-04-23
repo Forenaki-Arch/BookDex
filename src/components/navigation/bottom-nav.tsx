@@ -6,13 +6,12 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const items = [
-  { href: "/app", label: "Libreria", icon: Home },
-  { href: "/app/search", label: "Scopri", icon: Search },
+  { href: "/app", label: "Library", icon: Home },
+  { href: "/app/search", label: "Discover", icon: Search },
   { href: "/app/stats", label: "Stats", icon: BarChart3 },
-  { href: "/app/settings", label: "Profilo", icon: Settings },
+  { href: "/app/settings", label: "Settings", icon: Settings },
 ];
 
-// Bottom navigation stile iOS/Android — mobile only
 export function BottomNav() {
   const pathname = usePathname();
   return (

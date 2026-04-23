@@ -5,25 +5,24 @@ import { ScanLine, BookPlus, BookOpen } from "lucide-react";
 const steps = [
   {
     icon: ScanLine,
-    title: "Scansiona o cerca",
+    title: "Scan or search",
     description:
-      "Usa la fotocamera per leggere l'ISBN o digita il titolo. Google Books fa il resto.",
+      "Use your camera to read the ISBN, or type the title. Google Books does the rest.",
   },
   {
     icon: BookPlus,
-    title: "Aggiungi a una lista",
+    title: "Add to a list",
     description:
-      'Scegli con un tap: "Da Leggere", "In Lettura" oppure "Letti". Sposta quando vuoi.',
+      'Choose with a tap: "To Read", "Reading" or "Read". Move it whenever you like.',
   },
   {
     icon: BookOpen,
-    title: "Traccia e valuta",
+    title: "Track & rate",
     description:
-      "Aggiorna il progresso di lettura e, a fine libro, assegna le tue stelle.",
+      "Update your reading progress and, once done, give the book its stars.",
   },
 ];
 
-// Sezione "come funziona" con connecting line animata
 export function HowItWorks() {
   return (
     <section className="py-20 sm:py-28 bg-muted/30 border-y border-border/60">
@@ -35,15 +34,14 @@ export function HowItWorks() {
           className="text-center max-w-2xl mx-auto mb-16"
         >
           <span className="text-xs font-semibold uppercase tracking-widest text-primary">
-            In 3 step
+            3 steps
           </span>
           <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance">
-            Dal libro fisico alla libreria digitale.
+            From physical book to digital library.
           </h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-          {/* Linea di connessione (solo desktop) */}
           <div
             className="hidden md:block absolute top-[36px] left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-transparent via-border to-transparent"
             aria-hidden

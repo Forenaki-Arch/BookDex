@@ -14,63 +14,62 @@ import {
 const features = [
   {
     icon: ScanLine,
-    title: "Scanner ISBN integrato",
+    title: "Built-in ISBN scanner",
     description:
-      "Punta la fotocamera sul codice a barre: il libro viene aggiunto automaticamente alla tua libreria.",
+      "Point your camera at the barcode — the book is automatically added to your library.",
     color: "from-blue-500 to-cyan-500",
   },
   {
     icon: Library,
-    title: "Tre liste intelligenti",
+    title: "Three smart lists",
     description:
-      'Organizza la tua collezione in "Da Leggere", "In Lettura" e "Letti" con un tocco.',
+      'Organise your collection into "To Read", "Reading" and "Read" with a single tap.',
     color: "from-purple-500 to-pink-500",
   },
   {
     icon: Star,
-    title: "Valutazioni e progresso",
+    title: "Ratings & progress",
     description:
-      "Tieni traccia della percentuale di lettura e dai un voto in stelle ai libri completati.",
+      "Track your reading percentage and rate completed books with stars.",
     color: "from-amber-500 to-yellow-500",
   },
   {
     icon: Palette,
-    title: "Tre temi premium",
+    title: "Three premium themes",
     description:
-      "Chiaro, Scuro e un raffinato Sepia/Paper per simulare la lettura su carta.",
+      "Light, Dark, and a refined Sepia/Paper mode that simulates reading on paper.",
     color: "from-emerald-500 to-teal-500",
   },
   {
     icon: Smartphone,
-    title: "Installabile su mobile",
+    title: "Installable on mobile",
     description:
-      "Aggiungi BookDex alla home del tuo telefono: si apre in standalone, come un'app nativa.",
+      "Add BookDex to your home screen — it opens standalone, just like a native app.",
     color: "from-rose-500 to-red-500",
   },
   {
     icon: WifiOff,
-    title: "Funziona offline",
+    title: "Works offline",
     description:
-      "I tuoi dati sono salvati localmente. Consulta la tua libreria anche senza connessione.",
+      "Your data is saved locally. Browse your library even without a connection.",
     color: "from-sky-500 to-indigo-500",
   },
   {
     icon: Zap,
-    title: "Veloce come un lampo",
+    title: "Lightning fast",
     description:
-      "Costruita con Next.js App Router, ottimizzata per caricamenti istantanei e transizioni fluide.",
+      "Built with Next.js App Router, optimised for instant loads and smooth transitions.",
     color: "from-orange-500 to-amber-500",
   },
   {
     icon: Lock,
     title: "Privacy by design",
     description:
-      "Nessun account, nessun tracking. I tuoi libri restano sul tuo dispositivo.",
+      "No account, no tracking. Your books stay on your device.",
     color: "from-slate-500 to-gray-600",
   },
 ];
 
-// Sezione features con hover 3D e gradient per icone
 export function Features() {
   return (
     <section className="py-20 sm:py-28 container max-w-6xl">
@@ -81,13 +80,13 @@ export function Features() {
         className="text-center max-w-2xl mx-auto mb-14"
       >
         <span className="text-xs font-semibold uppercase tracking-widest text-primary">
-          Funzionalità
+          Features
         </span>
         <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance">
-          Tutto ciò che ti serve, niente di superfluo.
+          Everything you need, nothing you don&apos;t.
         </h2>
         <p className="mt-4 text-muted-foreground text-balance font-serif">
-          BookDex combina potenza e semplicità in un&apos;interfaccia pensata per durare.
+          BookDex blends power and simplicity into an interface built to last.
         </p>
       </motion.div>
 

@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 // Formatta un prezzo secondo la valuta
 export function formatPrice(amount: number, currency: string) {
   try {
-    return new Intl.NumberFormat("it-IT", {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency,
     }).format(amount);

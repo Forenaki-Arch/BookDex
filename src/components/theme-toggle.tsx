@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Toggle dei tre temi: Light, Dark, Sepia/Paper
 export function ThemeToggle({ variant = "outline" }: { variant?: "outline" | "ghost" }) {
   const { setTheme, theme } = useTheme();
   return (
@@ -17,21 +16,21 @@ export function ThemeToggle({ variant = "outline" }: { variant?: "outline" | "gh
       <DropdownMenuTrigger asChild>
         <Button variant={variant} size="sm" className="w-full justify-start gap-2">
           <Palette className="w-4 h-4" />
-          <span className="flex-1 text-left">Tema: {themeLabel(theme)}</span>
+          <span className="flex-1 text-left">Theme: {themeLabel(theme)}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="min-w-[180px]">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          <Sun className="w-4 h-4 mr-2" /> Chiaro
+          <Sun className="w-4 h-4 mr-2" /> Light
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          <Moon className="w-4 h-4 mr-2" /> Scuro
+          <Moon className="w-4 h-4 mr-2" /> Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("sepia")}>
-          <BookOpen className="w-4 h-4 mr-2" /> Carta / Sepia
+          <BookOpen className="w-4 h-4 mr-2" /> Paper / Sepia
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          <Palette className="w-4 h-4 mr-2" /> Sistema
+          <Palette className="w-4 h-4 mr-2" /> System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -40,9 +39,9 @@ export function ThemeToggle({ variant = "outline" }: { variant?: "outline" | "gh
 
 function themeLabel(t?: string) {
   switch (t) {
-    case "dark": return "Scuro";
+    case "dark": return "Dark";
     case "sepia": return "Sepia";
-    case "system": return "Sistema";
-    default: return "Chiaro";
+    case "system": return "System";
+    default: return "Light";
   }
 }

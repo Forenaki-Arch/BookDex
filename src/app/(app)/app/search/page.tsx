@@ -14,7 +14,6 @@ import { searchBooks, findByIsbn } from "@/lib/api/books-api";
 import type { Book } from "@/lib/types";
 import { toast } from "sonner";
 
-// Pagina di ricerca + scanner
 function SearchInner() {
   const params = useSearchParams();
   const [query, setQuery] = useState("");
@@ -23,12 +22,10 @@ function SearchInner() {
   const [scannerOpen, setScannerOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
-  // Shortcut PWA: /app/search?scan=1 apre direttamente lo scanner
   useEffect(() => {
     if (params.get("scan") === "1") setScannerOpen(true);
   }, [params]);
 
-  // Ricerca debounced (400ms), annullata su nuovi tasti
   useEffect(() => {
     if (query.trim().length < 3) {
       setResults([]);
@@ -42,7 +39,7 @@ function SearchInner() {
           setResults(books);
         } catch (err) {
           if ((err as Error).name !== "AbortError") {
-            toast.error("Ricerca fallita", { description: "Riprova tra poco." });
+            toast.error("Search failed", { description: "Please try again." });
           }
         }
       });
@@ -55,29 +52,29 @@ function SearchInner() {
 
   const handleIsbn = async (isbn: string) => {
     setScannerOpen(false);
-    toast.loading("Cerco il libro...", { id: "isbn-search" });
+    toast.loading("Looking up book...", { id: "isbn-search" });
     try {
       const book = await findByIsbn(isbn);
       toast.dismiss("isbn-search");
       if (book) {
         setSelectedBook(book);
       } else {
-        toast.error("Libro non trovato", {
-          description: `L'ISBN ${isbn} non è presente nel database.`,
+        toast.error("Book not found", {
+          description: `ISBN ${isbn} was not found in the database.`,
         });
       }
     } catch {
       toast.dismiss("isbn-search");
-      toast.error("Errore di rete");
+      toast.error("Network error");
     }
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Scopri</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Discover</h1>
         <p className="text-muted-foreground text-sm mt-1">
-          Cerca per titolo, autore o scansiona il codice ISBN.
+          Search by title, author, or scan an ISBN barcode.
         </p>
       </div>
 
@@ -87,15 +84,15 @@ function SearchInner() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Cerca un libro, un autore, un ISBN..."
+            placeholder="Search a book, author, ISBN..."
             className="pl-9 pr-9 h-12"
-            aria-label="Campo di ricerca libri"
+            aria-label="Book search field"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label="Pulisci ricerca"
+              aria-label="Clear search"
             >
               <X className="w-4 h-4" />
             </button>
@@ -105,24 +102,23 @@ function SearchInner() {
           size="lg"
           onClick={() => setScannerOpen(true)}
           className="h-12 px-4 shadow-md hover:shadow-lg"
-          aria-label="Apri scanner ISBN"
+          aria-label="Open ISBN scanner"
         >
           <ScanLine className="w-5 h-5" />
         </Button>
       </div>
 
-      {/* Suggerimenti quando la ricerca è vuota */}
       {!loading && query.length < 3 && results.length === 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <SuggestionCard
             icon={SearchIcon}
-            title="Cerca per testo"
-            description="Digita almeno 3 caratteri: titolo, autore, editore..."
+            title="Search by text"
+            description="Type at least 3 characters: title, author, publisher..."
           />
           <SuggestionCard
             icon={ScanLine}
-            title="Scansiona ISBN"
-            description="Usa la fotocamera per leggere il codice a barre di un libro."
+            title="Scan ISBN"
+            description="Use your camera to read a book's barcode."
           />
         </div>
       )}
@@ -159,7 +155,7 @@ function SearchInner() {
 
         {!loading && query.length >= 3 && results.length === 0 && (
           <p className="col-span-full text-center text-sm text-muted-foreground py-12">
-            Nessun risultato per &quot;{query}&quot;.
+            No results for &quot;{query}&quot;.
           </p>
         )}
       </div>
@@ -203,7 +199,7 @@ function SuggestionCard({
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="text-sm text-muted-foreground">Caricamento…</div>}>
+    <Suspense fallback={<div className="text-sm text-muted-foreground">Loading…</div>}>
       <SearchInner />
     </Suspense>
   );

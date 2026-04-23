@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, BookMarked } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// CTA finale con sfondo a gradiente pulsante
 export function CTA() {
   return (
     <section className="container max-w-6xl py-20 sm:py-28">
@@ -34,10 +33,10 @@ export function CTA() {
         >
           <BookMarked className="w-14 h-14 mx-auto mb-6 drop-shadow-lg" />
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-balance">
-            Inizia a tracciare la tua prossima lettura.
+            Start tracking your next read.
           </h2>
           <p className="mt-4 text-primary-foreground/80 max-w-xl mx-auto font-serif text-balance">
-            Gratuito, privato, veloce. Nessun account richiesto.
+            Free, private, fast. No account required.
           </p>
           <Button
             asChild
@@ -46,7 +45,7 @@ export function CTA() {
             className="mt-8 h-12 px-8 group hover:scale-105 transition-transform shadow-xl"
           >
             <Link href="/app">
-              Apri la tua libreria
+              Open your library
               <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>

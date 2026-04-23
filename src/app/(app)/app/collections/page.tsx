@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Folder, Hash, Plus } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BookListItem } from "@/components/books/book-list-item";
@@ -10,7 +10,6 @@ import { BookDetailDialog } from "@/components/books/book-detail-dialog";
 import { useBooksStore } from "@/store/books-store";
 import type { SavedBook } from "@/lib/types";
 
-// Pagina Collezioni: raggruppa i libri per tag custom
 export default function CollectionsPage() {
   const books = useBooksStore((s) => s.books);
   const hydrated = useBooksStore((s) => s.hydrated);
@@ -43,7 +42,7 @@ export default function CollectionsPage() {
   }, [books, activeTag]);
 
   if (!hydrated) {
-    return <div className="text-sm text-muted-foreground">Caricamento…</div>;
+    return <div className="text-sm text-muted-foreground">Loading…</div>;
   }
 
   return (
@@ -51,10 +50,10 @@ export default function CollectionsPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
           <Folder className="w-7 h-7 text-primary" />
-          Collezioni
+          Collections
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Organizza i tuoi libri in tag personalizzati. Modificali dalla scheda dettaglio di ciascun libro.
+          Organize your books with custom tags. Edit them from each book&apos;s detail sheet.
         </p>
       </div>
 
@@ -62,10 +61,10 @@ export default function CollectionsPage() {
         <Card>
           <CardContent className="py-12 text-center text-sm text-muted-foreground">
             <Hash className="w-10 h-10 mx-auto opacity-40 mb-3" />
-            <p>Nessuna collezione ancora. Apri un libro e aggiungi un tag dalla scheda dettaglio.</p>
+            <p>No collections yet. Open a book and add a tag from its detail sheet.</p>
             {untagged > 0 && (
               <p className="mt-2 text-xs">
-                {untagged} {untagged === 1 ? "libro non è" : "libri non sono"} in nessuna collezione.
+                {untagged} {untagged === 1 ? "book is" : "books are"} not in any collection.
               </p>
             )}
           </CardContent>
@@ -105,7 +104,7 @@ export default function CollectionsPage() {
               >
                 <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
                   #{activeTag} · {booksInActive.length}{" "}
-                  {booksInActive.length === 1 ? "libro" : "libri"}
+                  {booksInActive.length === 1 ? "book" : "books"}
                 </h2>
                 {booksInActive.map((b, i) => (
                   <BookListItem key={b.id} book={b} index={i} onClick={() => setSelected(b)} />
@@ -116,7 +115,7 @@ export default function CollectionsPage() {
 
           {!activeTag && (
             <p className="text-xs text-muted-foreground text-center py-4">
-              Seleziona una collezione qui sopra per vedere i libri.
+              Select a collection above to see its books.
             </p>
           )}
         </>

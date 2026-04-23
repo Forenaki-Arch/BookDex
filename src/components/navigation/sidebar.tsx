@@ -7,14 +7,13 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 const items = [
-  { href: "/app", label: "La mia Libreria", icon: Home },
-  { href: "/app/search", label: "Scopri & Scansiona", icon: Search },
-  { href: "/app/collections", label: "Collezioni", icon: Folder },
-  { href: "/app/stats", label: "Statistiche", icon: BarChart3 },
-  { href: "/app/settings", label: "Impostazioni", icon: Settings },
+  { href: "/app", label: "My Library", icon: Home },
+  { href: "/app/search", label: "Discover & Scan", icon: Search },
+  { href: "/app/collections", label: "Collections", icon: Folder },
+  { href: "/app/stats", label: "Statistics", icon: BarChart3 },
+  { href: "/app/settings", label: "Settings", icon: Settings },
 ];
 
-// Sidebar laterale — visibile da md in su
 export function Sidebar() {
   const pathname = usePathname();
   return (
@@ -60,7 +59,7 @@ export function Sidebar() {
       <div className="p-4 border-t border-border/60 space-y-2">
         <ThemeToggle />
         <p className="text-[10px] text-muted-foreground text-center">
-          BookDex v1.0 · Made with &hearts;
+          BookDex v1.1 · Made with &hearts;
         </p>
       </div>
     </aside>

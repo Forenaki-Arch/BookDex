@@ -5,24 +5,24 @@ import { ChevronDown } from "lucide-react";
 
 const faqs = [
   {
-    q: "BookDex è gratuito?",
-    a: "Sì, completamente. BookDex è un progetto open source, senza account, senza pubblicità e senza tracking.",
+    q: "Is BookDex free?",
+    a: "Yes, completely. BookDex is an open-source project with no account, no ads, and no tracking.",
   },
   {
-    q: "Dove vengono salvati i miei libri?",
-    a: "I dati vengono salvati localmente sul tuo dispositivo tramite localStorage. Puoi esportarli in JSON dalle Impostazioni per un backup.",
+    q: "Where are my books saved?",
+    a: "Data is saved locally on your device via localStorage. You can export it as JSON from Settings for a backup.",
   },
   {
-    q: "Lo scanner funziona su ogni dispositivo?",
-    a: "Funziona su qualsiasi browser moderno con accesso alla fotocamera. Richiede una connessione HTTPS (o localhost).",
+    q: "Does the scanner work on every device?",
+    a: "It works on any modern browser with camera access. HTTPS (or localhost) is required.",
   },
   {
-    q: "Posso usarlo offline?",
-    a: "Sì. Una volta caricata, l'app funziona offline grazie alla tecnologia PWA. Ovviamente le nuove ricerche necessitano di connessione.",
+    q: "Can I use it offline?",
+    a: "Yes. Once loaded, the app works offline thanks to PWA technology. New searches still need a connection.",
   },
   {
-    q: "Da quale fonte vengono i dati dei libri?",
-    a: "BookDex usa le API pubbliche di Google Books per copertina, descrizione, prezzo stimato e altri metadati.",
+    q: "Where does the book data come from?",
+    a: "BookDex uses the Google Books public API for covers, descriptions, estimated prices, and other metadata.",
   },
 ];
 
@@ -38,7 +38,7 @@ export function FAQ() {
         className="text-center mb-12"
       >
         <span className="text-xs font-semibold uppercase tracking-widest text-primary">FAQ</span>
-        <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Domande frequenti</h2>
+        <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">Frequently asked questions</h2>
       </motion.div>
 
       <div className="space-y-3">

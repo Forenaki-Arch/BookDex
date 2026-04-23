@@ -11,16 +11,16 @@ const lora = Lora({ subsets: ["latin"], variable: "--font-serif", display: "swap
 
 export const metadata: Metadata = {
   title: {
-    default: "BookDex — Il tuo tracker personale di libri",
+    default: "BookDex — Your personal book tracker",
     template: "%s | BookDex",
   },
   description:
-    "Scansiona, cataloga e tieni traccia dei tuoi libri. Mobile-first PWA con scanner ISBN, liste personalizzate, valutazioni e tre temi visivi.",
+    "Scan, catalogue, and track your books. Mobile-first PWA with ISBN scanner, smart lists, ratings and three visual themes.",
   manifest: "/manifest.webmanifest",
   applicationName: "BookDex",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "BookDex" },
-  keywords: ["libri", "lettura", "ISBN", "scanner", "libreria personale", "PWA"],
-  authors: [{ name: "BookDex" }],
+  keywords: ["books", "reading", "ISBN", "scanner", "personal library", "PWA"],
+  authors: [{ name: "Forenaki" }],
   formatDetection: { telephone: false },
 };
 
@@ -38,7 +38,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="it" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${lora.variable} font-sans`}>
         <ThemeProvider>
           <AutoThemeMount />

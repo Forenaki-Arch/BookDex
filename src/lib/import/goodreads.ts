@@ -97,7 +97,7 @@ function rowToBook(headers: string[], row: string[]): SavedBook | null {
     id,
     isbn,
     title,
-    authors: authors.length > 0 ? authors : ["Autore sconosciuto"],
+    authors: authors.length > 0 ? authors : ["Unknown Author"],
     publisher,
     pageCount: pagesNum > 0 ? pagesNum : undefined,
     publishedDate: yearNum > 0 ? String(yearNum) : undefined,

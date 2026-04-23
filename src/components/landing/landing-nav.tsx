@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
-// Navbar della landing, sticky con effetto blur allo scroll
 export function LandingNav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -29,7 +28,7 @@ export function LandingNav() {
       )}
     >
       <nav className="container max-w-6xl flex items-center justify-between h-16">
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href="/about" className="flex items-center gap-2 group">
           <motion.div whileHover={{ rotate: -12, scale: 1.1 }} transition={{ type: "spring" }}>
             <BookMarked className="w-6 h-6 text-primary" />
           </motion.div>
@@ -38,10 +37,10 @@ export function LandingNav() {
 
         <div className="hidden md:flex items-center gap-6 text-sm">
           <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-            Funzionalità
+            Features
           </a>
           <a href="#how" className="text-muted-foreground hover:text-foreground transition-colors">
-            Come funziona
+            How it works
           </a>
           <a href="#faq" className="text-muted-foreground hover:text-foreground transition-colors">
             FAQ
@@ -53,7 +52,7 @@ export function LandingNav() {
             <ThemeToggle variant="ghost" />
           </div>
           <Button asChild size="sm" className="shadow-md">
-            <Link href="/app">Apri App</Link>
+            <Link href="/app">Open App</Link>
           </Button>
         </div>
 
@@ -73,10 +72,10 @@ export function LandingNav() {
           className="md:hidden border-t border-border/60 bg-background/95 backdrop-blur-xl px-4 py-4 space-y-2"
         >
           <a href="#features" onClick={() => setMobileOpen(false)} className="block py-2 text-sm">
-            Funzionalità
+            Features
           </a>
           <a href="#how" onClick={() => setMobileOpen(false)} className="block py-2 text-sm">
-            Come funziona
+            How it works
           </a>
           <a href="#faq" onClick={() => setMobileOpen(false)} className="block py-2 text-sm">
             FAQ
@@ -85,7 +84,7 @@ export function LandingNav() {
             <ThemeToggle />
           </div>
           <Button asChild className="w-full">
-            <Link href="/app">Apri App</Link>
+            <Link href="/app">Open App</Link>
           </Button>
         </motion.div>
       )}

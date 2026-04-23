@@ -13,25 +13,24 @@ import type { BookStatus, SavedBook } from "@/lib/types";
 const TABS: { value: BookStatus; label: string; icon: typeof BookOpen; emptyMessage: string }[] = [
   {
     value: "reading",
-    label: "In Lettura",
+    label: "Reading",
     icon: BookOpen,
-    emptyMessage: "Nessun libro in lettura al momento. Inizia un nuovo viaggio!",
+    emptyMessage: "No books in progress. Start a new journey!",
   },
   {
     value: "to-read",
-    label: "Da Leggere",
+    label: "To Read",
     icon: Bookmark,
-    emptyMessage: "La tua wishlist è vuota. Scopri il prossimo libro da divorare.",
+    emptyMessage: "Your wishlist is empty. Find your next great read.",
   },
   {
     value: "read",
-    label: "Letti",
+    label: "Read",
     icon: CheckCheck,
-    emptyMessage: "Nessun libro completato ancora. Il tuo primo traguardo ti aspetta.",
+    emptyMessage: "No books finished yet. Your first milestone awaits.",
   },
 ];
 
-// Dashboard principale con le tre liste
 export default function DashboardPage() {
   const books = useBooksStore((s) => s.books);
   const hydrated = useBooksStore((s) => s.hydrated);
@@ -54,43 +53,41 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header + stats */}
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
             <Library className="w-7 h-7 text-primary" />
-            La mia Libreria
+            My Library
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             {stats.total === 0
-              ? "Inizia a costruire la tua collezione."
-              : `${stats.total} ${stats.total === 1 ? "libro" : "libri"} in collezione`}
+              ? "Start building your collection."
+              : `${stats.total} ${stats.total === 1 ? "book" : "books"} in your collection`}
           </p>
         </div>
         <div className="flex gap-2">
           <Button asChild size="sm" variant="outline">
             <Link href="/app/collections">
-              <Folder className="w-4 h-4 mr-1" /> Collezioni
+              <Folder className="w-4 h-4 mr-1" /> Collections
             </Link>
           </Button>
           <Button asChild size="sm" className="shadow-md">
             <Link href="/app/search">
-              <Plus className="w-4 h-4 mr-1" /> Aggiungi
+              <Plus className="w-4 h-4 mr-1" /> Add
             </Link>
           </Button>
         </div>
       </div>
 
-      {/* Mini statistiche */}
       {hydrated && stats.total > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="grid grid-cols-3 gap-2 sm:gap-3"
         >
-          <StatCard icon={BookOpen} label="In Lettura" value={stats.reading} accent="text-blue-500" />
-          <StatCard icon={Bookmark} label="Da Leggere" value={stats.toRead} accent="text-amber-500" />
-          <StatCard icon={CheckCheck} label="Completati" value={stats.read} accent="text-emerald-500" />
+          <StatCard icon={BookOpen} label="Reading" value={stats.reading} accent="text-blue-500" />
+          <StatCard icon={Bookmark} label="To Read" value={stats.toRead} accent="text-amber-500" />
+          <StatCard icon={CheckCheck} label="Completed" value={stats.read} accent="text-emerald-500" />
         </motion.div>
       )}
 
@@ -110,7 +107,7 @@ export default function DashboardPage() {
           return (
             <TabsContent key={t.value} value={t.value} className="mt-6 space-y-2.5">
               {!hydrated ? (
-                <div className="text-center py-12 text-sm text-muted-foreground">Caricamento…</div>
+                <div className="text-center py-12 text-sm text-muted-foreground">Loading…</div>
               ) : items.length === 0 ? (
                 <EmptyState message={t.emptyMessage} />
               ) : (
@@ -174,7 +171,7 @@ function EmptyState({ message }: { message: string }) {
       <p className="text-sm text-muted-foreground max-w-xs mx-auto text-balance">{message}</p>
       <Button asChild variant="outline" size="sm" className="mt-4">
         <Link href="/app/search">
-          <Plus className="w-4 h-4 mr-1" /> Cerca un libro
+          <Plus className="w-4 h-4 mr-1" /> Search a book
         </Link>
       </Button>
     </motion.div>

@@ -8,9 +8,8 @@ import { BarChart } from "@/components/stats/bar-chart";
 import { useBooksStore } from "@/store/books-store";
 import type { SavedBook } from "@/lib/types";
 
-const MONTHS = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-// Pagina statistiche della libreria
 export default function StatsPage() {
   const books = useBooksStore((s) => s.books);
   const hydrated = useBooksStore((s) => s.hydrated);
@@ -18,7 +17,7 @@ export default function StatsPage() {
   const data = useMemo(() => computeStats(Object.values(books)), [books]);
 
   if (!hydrated) {
-    return <div className="text-sm text-muted-foreground">Caricamento…</div>;
+    return <div className="text-sm text-muted-foreground">Loading…</div>;
   }
 
   return (
@@ -26,17 +25,17 @@ export default function StatsPage() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
           <BarChart3 className="w-7 h-7 text-primary" />
-          Statistiche
+          Statistics
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Un colpo d&apos;occhio sulle tue abitudini di lettura.
+          A quick overview of your reading habits.
         </p>
       </div>
 
       {data.totalBooks === 0 ? (
         <div className="text-center py-16 px-4 rounded-2xl border border-dashed border-border bg-muted/30">
           <p className="text-sm text-muted-foreground">
-            Aggiungi qualche libro alla libreria per vedere le tue statistiche.
+            Add some books to your library to see your statistics.
           </p>
         </div>
       ) : (
@@ -45,16 +44,16 @@ export default function StatsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
-          <StatCard icon={Library} label="Libri totali" value={data.totalBooks} />
-          <StatCard icon={BookOpen} label="Letti" value={data.readCount} />
-          <StatCard icon={TrendingUp} label="Pagine lette" value={data.totalPagesRead} />
+          <StatCard icon={Library} label="Total books" value={data.totalBooks} />
+          <StatCard icon={BookOpen} label="Read" value={data.readCount} />
+          <StatCard icon={TrendingUp} label="Pages read" value={data.totalPagesRead} />
           <StatCard
             icon={Star}
-            label="Voto medio"
+            label="Avg. rating"
             value={data.avgRating ? `${data.avgRating.toFixed(1)} / 5` : "—"}
           />
-          <StatCard icon={User} label="Autori unici" value={data.uniqueAuthors} />
-          <StatCard icon={Library} label="Collezioni" value={data.uniqueTags} />
+          <StatCard icon={User} label="Unique authors" value={data.uniqueAuthors} />
+          <StatCard icon={Library} label="Collections" value={data.uniqueTags} />
         </motion.div>
       )}
 
@@ -62,12 +61,12 @@ export default function StatsPage() {
         <>
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Libri completati per anno</CardTitle>
+              <CardTitle className="text-base">Books completed per year</CardTitle>
             </CardHeader>
             <CardContent>
               {data.perYear.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  Nessun libro marcato come completato ancora.
+                  No books marked as completed yet.
                 </p>
               ) : (
                 <BarChart data={data.perYear} />
@@ -78,7 +77,7 @@ export default function StatsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-base">
-                Completati per mese · {new Date().getFullYear()}
+                Completed per month · {new Date().getFullYear()}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -89,7 +88,7 @@ export default function StatsPage() {
           {data.topAuthors.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Top autori</CardTitle>
+                <CardTitle className="text-base">Top authors</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 {data.topAuthors.map((a, i) => (
@@ -104,7 +103,7 @@ export default function StatsPage() {
                       <span className="text-sm font-medium truncate">{a.name}</span>
                     </div>
                     <Badge variant="secondary" className="shrink-0">
-                      {a.count} {a.count === 1 ? "libro" : "libri"}
+                      {a.count} {a.count === 1 ? "book" : "books"}
                     </Badge>
                   </div>
                 ))}
@@ -115,7 +114,7 @@ export default function StatsPage() {
           {data.topTags.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Collezioni più popolate</CardTitle>
+                <CardTitle className="text-base">Most populated collections</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-wrap gap-2">
                 {data.topTags.map((t) => (
@@ -162,7 +161,6 @@ function computeStats(books: SavedBook[]) {
   const avgRating =
     rated.length > 0 ? rated.reduce((a, b) => a + (b.rating ?? 0), 0) / rated.length : 0;
 
-  // Anni
   const years = new Map<number, number>();
   for (const b of readBooks) {
     const ts = b.finishedAt ?? b.updatedAt;
@@ -173,7 +171,6 @@ function computeStats(books: SavedBook[]) {
     .sort(([a], [b]) => a - b)
     .map(([y, v]) => ({ label: String(y), value: v }));
 
-  // Mesi (anno corrente)
   const currentYear = new Date().getFullYear();
   const monthsArr = new Array(12).fill(0);
   for (const b of readBooks) {
@@ -183,7 +180,6 @@ function computeStats(books: SavedBook[]) {
   }
   const perMonth = MONTHS.map((m, i) => ({ label: m, value: monthsArr[i] }));
 
-  // Top autori
   const authors = new Map<string, number>();
   for (const b of books) {
     for (const a of b.authors) authors.set(a, (authors.get(a) ?? 0) + 1);
@@ -193,7 +189,6 @@ function computeStats(books: SavedBook[]) {
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
 
-  // Top tag
   const tags = new Map<string, number>();
   for (const b of books) {
     for (const t of b.tags ?? []) tags.set(t, (tags.get(t) ?? 0) + 1);

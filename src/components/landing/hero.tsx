@@ -4,15 +4,12 @@ import { motion } from "framer-motion";
 import { ArrowRight, BookMarked, ScanLine, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Hero della landing page con animazioni scenografiche
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* Sfondo animato a gradiente */}
       <div className="absolute inset-0 animated-gradient" aria-hidden />
       <div className="absolute inset-0 bg-gradient-mesh" aria-hidden />
 
-      {/* Bollicine decorative fluttuanti */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
         {[...Array(6)].map((_, i) => (
           <motion.div
@@ -39,7 +36,6 @@ export function Hero() {
       </div>
 
       <div className="container max-w-6xl relative py-20 sm:py-28 lg:py-36 text-center">
-        {/* Badge in alto */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -47,20 +43,19 @@ export function Hero() {
           className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/60 backdrop-blur-md px-4 py-1.5 text-xs font-medium shadow-sm"
         >
           <Sparkles className="w-3.5 h-3.5 text-primary" />
-          <span>v1.0 — Ora disponibile come PWA</span>
+          <span>v1.1 — Now available as a PWA</span>
         </motion.div>
 
-        {/* Titolo principale */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
           className="mt-6 text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-balance"
         >
-          La tua libreria,{" "}
+          Your library,{" "}
           <span className="relative inline-block">
             <span className="bg-gradient-to-r from-primary via-accent-foreground to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-shift">
-              reinventata
+              reinvented
             </span>
             <motion.span
               className="absolute -right-6 -top-2"
@@ -72,18 +67,16 @@ export function Hero() {
           </span>
         </motion.h1>
 
-        {/* Sottotitolo */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-6 mx-auto max-w-2xl text-lg sm:text-xl text-muted-foreground text-balance font-serif"
         >
-          Scansiona ISBN, cataloga titoli, traccia il tuo progresso di lettura.
-          Un&apos;esperienza mobile-first, offline-first, con un design che ami guardare.
+          Scan ISBNs, catalogue titles, track your reading progress.
+          A mobile-first, offline-first experience with a design you&apos;ll love.
         </motion.p>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,19 +86,18 @@ export function Hero() {
           <Button asChild size="lg" className="group h-12 px-8 shadow-xl hover:shadow-2xl hover:shadow-primary/30 transition-all">
             <Link href="/app">
               <BookMarked className="w-5 h-5 mr-2 transition-transform group-hover:-rotate-12" />
-              Apri BookDex
+              Open BookDex
               <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="h-12 px-8 bg-background/60 backdrop-blur-md">
             <Link href="/app/search?scan=1">
               <ScanLine className="w-5 h-5 mr-2" />
-              Scansiona subito
+              Scan now
             </Link>
           </Button>
         </motion.div>
 
-        {/* Mockup animato (preview card) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}

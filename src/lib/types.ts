@@ -37,7 +37,7 @@ export interface BookStatusConfig {
 }
 
 export const STATUS_LABELS: Record<BookStatus, string> = {
-  "to-read": "Da Leggere",
-  reading: "In Lettura",
-  read: "Letti",
+  "to-read": "To Read",
+  reading: "Reading",
+  read: "Read",
 };

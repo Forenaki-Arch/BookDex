@@ -23,7 +23,6 @@ interface Props {
   onClick?: () => void;
 }
 
-// Riga libro in dashboard con azioni rapide
 export function BookListItem({ book, index, onClick }: Props) {
   const remove = useBooksStore((s) => s.removeBook);
   const move = useBooksStore((s) => s.moveBook);
@@ -35,7 +34,7 @@ export function BookListItem({ book, index, onClick }: Props) {
 
   const handleMove = (status: BookStatus) => {
     move(book.id, status);
-    toast.success(`Spostato in "${STATUS_LABELS[status]}"`);
+    toast.success(`Moved to "${STATUS_LABELS[status]}"`);
   };
 
   return (
@@ -50,7 +49,7 @@ export function BookListItem({ book, index, onClick }: Props) {
         type="button"
         onClick={onClick}
         className="shrink-0 rounded-md overflow-hidden hover:scale-105 transition-transform"
-        aria-label={`Dettagli di ${book.title}`}
+        aria-label={`Details for ${book.title}`}
       >
         {book.thumbnail ? (
           <Image
@@ -80,7 +79,7 @@ export function BookListItem({ book, index, onClick }: Props) {
         {showProgress && (
           <div className="mt-2.5 space-y-1.5">
             <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-              <span>Progresso</span>
+              <span>Progress</span>
               <span className="font-semibold tabular-nums">{book.progress ?? 0}%</span>
             </div>
             <Progress value={book.progress ?? 0} className="h-1.5" />
@@ -92,7 +91,7 @@ export function BookListItem({ book, index, onClick }: Props) {
                     setProgress(book.id, p);
                     if (p === 100) {
                       move(book.id, "read");
-                      toast.success("Complimenti! Libro completato 🎉");
+                      toast.success("Congrats! Book completed 🎉");
                     }
                   }}
                   className="text-[10px] px-1.5 py-0.5 rounded bg-muted hover:bg-accent transition-colors"
@@ -111,7 +110,7 @@ export function BookListItem({ book, index, onClick }: Props) {
               size="sm"
               onChange={(r) => {
                 rate(book.id, r);
-                toast.success(`Valutato ${r}/5`);
+                toast.success(`Rated ${r}/5`);
               }}
             />
           </div>
@@ -120,29 +119,29 @@ export function BookListItem({ book, index, onClick }: Props) {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="ghost" aria-label="Opzioni">
+          <Button size="icon" variant="ghost" aria-label="Options">
             <MoreVertical className="w-4 h-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           {book.status !== "to-read" && (
             <DropdownMenuItem onClick={() => handleMove("to-read")}>
-              <Bookmark className="w-4 h-4 mr-2" /> In &quot;Da Leggere&quot;
+              <Bookmark className="w-4 h-4 mr-2" /> Move to &quot;To Read&quot;
             </DropdownMenuItem>
           )}
           {book.status !== "reading" && (
             <DropdownMenuItem onClick={() => handleMove("reading")}>
-              <BookOpen className="w-4 h-4 mr-2" /> In &quot;In Lettura&quot;
+              <BookOpen className="w-4 h-4 mr-2" /> Move to &quot;Reading&quot;
             </DropdownMenuItem>
           )}
           {book.status !== "read" && (
             <DropdownMenuItem onClick={() => handleMove("read")}>
-              <CheckCheck className="w-4 h-4 mr-2" /> In &quot;Letti&quot;
+              <CheckCheck className="w-4 h-4 mr-2" /> Move to &quot;Read&quot;
             </DropdownMenuItem>
           )}
           {book.status === "read" && (
             <DropdownMenuItem onClick={() => rate(book.id, 5)}>
-              <Star className="w-4 h-4 mr-2" /> Preferito (5★)
+              <Star className="w-4 h-4 mr-2" /> Favourite (5★)
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
@@ -150,10 +149,10 @@ export function BookListItem({ book, index, onClick }: Props) {
             className="text-destructive focus:text-destructive"
             onClick={() => {
               remove(book.id);
-              toast.info("Libro rimosso");
+              toast.info("Book removed");
             }}
           >
-            <Trash2 className="w-4 h-4 mr-2" /> Rimuovi
+            <Trash2 className="w-4 h-4 mr-2" /> Remove
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
