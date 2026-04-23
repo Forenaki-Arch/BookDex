@@ -54,7 +54,7 @@ export function BarcodeScanner({ onScan, onClose }: BarcodeScannerProps) {
       readerRef.current = reader;
       setIsScanning(true);
 
-      reader.decodeFromVideoElement(videoRef.current, (result, err) => {
+      reader.decodeFromVideoElementContinuously(videoRef.current, (result, err) => {
         if (result) {
           const code = result.getText();
           const clean = code.replace(/[-\s]/g, "");
