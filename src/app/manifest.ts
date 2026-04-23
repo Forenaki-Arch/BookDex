@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "BookDex — Your book tracker",
+    name: "BookDex v1.2 — Your book tracker",
     short_name: "BookDex",
     description: "Scan, catalogue, and track your books.",
     start_url: "/app",

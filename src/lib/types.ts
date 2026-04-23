@@ -20,13 +20,14 @@ export interface Book {
 
 export interface SavedBook extends Book {
   status: BookStatus;
-  rating?: number;                          // 1-5, valido solo per "read"
-  progress?: number;                        // 0-100 per "reading"
-  notes?: string;                           // note libere dell'utente
-  tags?: string[];                          // collezioni personalizzate (es. "fantasy", "regalo")
-  startedAt?: number;                       // timestamp inizio lettura
-  finishedAt?: number;                      // timestamp completamento
-  addedAt: number;                          // timestamp
+  rating?: number;                          // 1-5, valid only for "read"
+  progress?: number;                        // 0-100 percentage for "reading"
+  currentPage?: number;                     // absolute page number the reader is on
+  notes?: string;                           // free-form personal notes
+  tags?: string[];                          // custom collections (e.g. "fantasy", "gift")
+  startedAt?: number;                       // timestamp when reading started
+  finishedAt?: number;                      // timestamp when finished
+  addedAt: number;
   updatedAt: number;
 }
 

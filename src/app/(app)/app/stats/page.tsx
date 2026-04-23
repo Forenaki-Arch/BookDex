@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { BarChart3, BookOpen, Library, Star, TrendingUp, User } from "lucide-react";
+import { BarChart3, BookOpen, BookMarked, Library, Star, TrendingUp, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart } from "@/components/stats/bar-chart";
@@ -47,6 +47,7 @@ export default function StatsPage() {
           <StatCard icon={Library} label="Total books" value={data.totalBooks} />
           <StatCard icon={BookOpen} label="Read" value={data.readCount} />
           <StatCard icon={TrendingUp} label="Pages read" value={data.totalPagesRead} />
+          <StatCard icon={BookMarked} label="Pages in progress" value={data.pagesInProgress} />
           <StatCard
             icon={Star}
             label="Avg. rating"
@@ -154,8 +155,10 @@ function StatCard({
 function computeStats(books: SavedBook[]) {
   const totalBooks = books.length;
   const readBooks = books.filter((b) => b.status === "read");
+  const readingBooks = books.filter((b) => b.status === "reading");
   const readCount = readBooks.length;
   const totalPagesRead = readBooks.reduce((acc, b) => acc + (b.pageCount ?? 0), 0);
+  const pagesInProgress = readingBooks.reduce((acc, b) => acc + (b.currentPage ?? 0), 0);
 
   const rated = readBooks.filter((b) => typeof b.rating === "number" && b.rating > 0);
   const avgRating =
@@ -202,6 +205,7 @@ function computeStats(books: SavedBook[]) {
     totalBooks,
     readCount,
     totalPagesRead,
+    pagesInProgress,
     avgRating,
     uniqueAuthors: authors.size,
     uniqueTags: tags.size,

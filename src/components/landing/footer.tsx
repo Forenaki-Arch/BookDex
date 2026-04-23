@@ -8,7 +8,7 @@ export function Footer() {
         <div className="flex items-center gap-2">
           <BookMarked className="w-4 h-4 text-primary" />
           <span className="font-semibold">BookDex</span>
-          <span className="text-muted-foreground">v1.1</span>
+          <span className="text-muted-foreground">v1.2</span>
         </div>
 
         <div className="flex items-center gap-6 text-muted-foreground">

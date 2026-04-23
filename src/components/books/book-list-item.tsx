@@ -27,6 +27,7 @@ export function BookListItem({ book, index, onClick }: Props) {
   const remove = useBooksStore((s) => s.removeBook);
   const move = useBooksStore((s) => s.moveBook);
   const setProgress = useBooksStore((s) => s.setProgress);
+  const setCurrentPage = useBooksStore((s) => s.setCurrentPage);
   const rate = useBooksStore((s) => s.rateBook);
 
   const showProgress = book.status === "reading";
@@ -78,9 +79,32 @@ export function BookListItem({ book, index, onClick }: Props) {
 
         {showProgress && (
           <div className="mt-2.5 space-y-1.5">
-            <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-              <span>Progress</span>
-              <span className="font-semibold tabular-nums">{book.progress ?? 0}%</span>
+            {/* Page number tracker */}
+            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              <span className="shrink-0">Page</span>
+              <input
+                type="number"
+                min={0}
+                max={book.pageCount ?? undefined}
+                value={book.currentPage ?? ""}
+                placeholder="—"
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => {
+                  const val = Math.max(0, Number(e.target.value));
+                  if (val === book.pageCount) {
+                    setCurrentPage(book.id, val);
+                    move(book.id, "read");
+                    toast.success("Congrats! Book completed 🎉");
+                  } else {
+                    setCurrentPage(book.id, val);
+                  }
+                }}
+                className="w-14 h-6 px-1.5 rounded border border-border/60 bg-background text-center text-[11px] font-semibold tabular-nums focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+              {book.pageCount ? (
+                <span className="shrink-0">/ {book.pageCount} pp.</span>
+              ) : null}
+              <span className="ml-auto font-semibold tabular-nums">{book.progress ?? 0}%</span>
             </div>
             <Progress value={book.progress ?? 0} className="h-1.5" />
             <div className="flex gap-1 flex-wrap">

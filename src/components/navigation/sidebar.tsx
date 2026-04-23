@@ -59,7 +59,7 @@ export function Sidebar() {
       <div className="p-4 border-t border-border/60 space-y-2">
         <ThemeToggle />
         <p className="text-[10px] text-muted-foreground text-center">
-          BookDex v1.1 · Made with &hearts;
+          BookDex v1.2 · Made with &hearts;
         </p>
       </div>
     </aside>

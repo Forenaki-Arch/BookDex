@@ -224,7 +224,7 @@ export default function SettingsPage() {
           <CardTitle className="flex items-center gap-2">
             <Info className="w-5 h-5" /> About
           </CardTitle>
-          <CardDescription>BookDex v1.1</CardDescription>
+          <CardDescription>BookDex v1.2</CardDescription>
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-3">
           <p>

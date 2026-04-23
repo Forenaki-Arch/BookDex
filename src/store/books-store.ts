@@ -11,6 +11,7 @@ interface BooksState {
   removeBook: (id: string) => void;
   rateBook: (id: string, rating: number) => void;
   setProgress: (id: string, progress: number) => void;
+  setCurrentPage: (id: string, page: number) => void;
   setNotes: (id: string, notes: string) => void;
   setTags: (id: string, tags: string[]) => void;
   importBooks: (items: SavedBook[]) => { added: number; skipped: number };
@@ -86,6 +87,22 @@ export const useBooksStore = create<BooksState>()(
           };
         }),
 
+      setCurrentPage: (id, page) =>
+        set((state) => {
+          const book = state.books[id];
+          if (!book) return state;
+          const clamped = Math.max(0, book.pageCount ? Math.min(book.pageCount, page) : page);
+          const progress = book.pageCount
+            ? Math.round((clamped / book.pageCount) * 100)
+            : book.progress;
+          return {
+            books: {
+              ...state.books,
+              [id]: { ...book, currentPage: clamped, progress, updatedAt: Date.now() },
+            },
+          };
+        }),
+
       setNotes: (id, notes) =>
         set((state) => {
           const book = state.books[id];
@@ -151,10 +168,10 @@ export const useBooksStore = create<BooksState>()(
     {
       name: "bookdex-storage",
       storage: createJSONStorage(() => localStorage),
-      version: 2, // bump: aggiunti tags, startedAt, finishedAt
+      version: 3, // bump: added currentPage
       migrate: (persistedState: unknown, fromVersion) => {
-        // Migrazione v1 → v2: nessuna modifica distruttiva, i nuovi campi sono opzionali
-        if (fromVersion < 2) return persistedState as BooksState;
+        // All new fields are optional — safe to forward-migrate without transforms
+        void fromVersion;
         return persistedState as BooksState;
       },
       onRehydrateStorage: () => (state) => {
